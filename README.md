@@ -1,7 +1,8 @@
 # hyperledger fabric cookbook(working in progress)
-本教程使用的版本为hyperledger fabric 1.4，这是目前最新的版本，也是第一个长期支持版本，官方保证后续能平滑升级。详情可以参考[what's new in hyperledger fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/whatsnew.html)  
+本教程使用的版本为[hyperledger fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4)，这是目前最新的版本，也是第一个长期支持版本，官方保证后续能平滑升级。详情可以参考[what's new in hyperledger fabric 1.4](https://hyperledger-fabric.readthedocs.io/en/release-1.4/whatsnew.html)  
 
 开发平台为Mac OS
+
 ## 概念介绍
 概念介绍[官方文档](https://hyperledger-fabric.readthedocs.io/en/latest/key_concepts.html)包含以下方面：  
 * Introduction
@@ -93,6 +94,94 @@ shiming@pro ➜  ~ nvm use v8.15.1
 Now using node v8.15.1 (npm v6.4.1)
 ```
 
+## 安装示例、二进制文件和docker镜像
+官方整理好了脚本去安装示例项目，二进制文件和docker镜像
+``` zsh
+curl -sSL http://bit.ly/2ysbOFE | bash -s 1.4.0
+```
+但是bit.ly短网址在国内是被墙的，如果terminal没走代理是无法读到这个短网址的信息的，会出现报错curl: (56) Recv failure: Connection reset by peer。
+
+解决方案：1.给terminal挂代理 2.可以用这个命令代替短网址，这个长网址就是短网址解析出来的`curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s 1.4.0`
+
+整个脚本执行需要一点时间
+``` zsh
+shiming@pro ➜  ~ curl -sSL http://bit.ly/2ysbOFE | bash -s 1.4.0
+curl: (56) Recv failure: Connection reset by peer
+shiming@pro ➜  ~ curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s 1.4.0
+
+Installing hyperledger/fabric-samples repo
+...
+```
+
+**脚本功能详解**：  
+**1. clone fabric-samples 1.4.0示例项目, 放在当前目录中**  
+
+**2. 在`fabric-sample/bin`目录中有以下二进制文件被下载**  
+* configtxgen
+* configtxlator
+* cryptogen
+* discover
+* idemixgen
+* orderer
+* peer
+* fabric-ca-client
+
+这个目录下有个文件叫`get-docker-images.sh`，它的功能是拉取指定的镜像  
+fabric镜像：    
+```
+FABRIC_IMAGES=(fabric-peer fabric-orderer fabric-ccenv fabric-tools)
+```
+
+第三方镜像：  
+```
+THIRDPARTY_IMAGES=(fabric-kafka fabric-zookeeper fabric-couchdb fabric-baseos)
+```
+
+**3. 拉取docker镜像**  
+如果你docker中本身没有其他image则`docker image ls`查看到的镜像列表应该如下，这些镜像都是从[docker hub](https://hub.docker.com/u/hyperledger/)上下载的  
+``` zsh
+shiming@pro ➜  ~ docker image ls
+REPOSITORY                     TAG                 IMAGE ID            CREATED             SIZE
+hyperledger/fabric-javaenv     1.4.0               3d91b3bf7118        8 weeks ago         1.75GB
+hyperledger/fabric-javaenv     latest              3d91b3bf7118        8 weeks ago         1.75GB
+hyperledger/fabric-tools       1.4.0               0a44f4261a55        2 months ago        1.56GB
+hyperledger/fabric-tools       latest              0a44f4261a55        2 months ago        1.56GB
+hyperledger/fabric-ccenv       1.4.0               5b31d55f5f3a        2 months ago        1.43GB
+hyperledger/fabric-ccenv       latest              5b31d55f5f3a        2 months ago        1.43GB
+hyperledger/fabric-orderer     1.4.0               54f372205580        2 months ago        150MB
+hyperledger/fabric-orderer     latest              54f372205580        2 months ago        150MB
+hyperledger/fabric-peer        1.4.0               304fac59b501        2 months ago        157MB
+hyperledger/fabric-peer        latest              304fac59b501        2 months ago        157MB
+hyperledger/fabric-ca          1.4.0               1a804ab74f58        2 months ago        244MB
+hyperledger/fabric-ca          latest              1a804ab74f58        2 months ago        244MB
+hyperledger/fabric-zookeeper   0.4.14              d36da0db87a4        5 months ago        1.43GB
+hyperledger/fabric-zookeeper   latest              d36da0db87a4        5 months ago        1.43GB
+hyperledger/fabric-kafka       0.4.14              a3b095201c66        5 months ago        1.44GB
+hyperledger/fabric-kafka       latest              a3b095201c66        5 months ago        1.44GB
+hyperledger/fabric-couchdb     0.4.14              f14f97292b4c        5 months ago        1.5GB
+hyperledger/fabric-couchdb     latest              f14f97292b4c        5 months ago        1.5GB
+```
+
+如果要分开指定fabric, fabric ca和第三方image版本则可以用以下命令
+``` zsh
+curl -sSL http://bit.ly/2ysbOFE | bash -s <fabric> <fabric-ca> <thirdparty>
+curl -sSL http://bit.ly/2ysbOFE | bash -s 1.4.0 1.4.0 0.4.14
+```
+
+如果要方便使用`fabric-sample/bin`中的命令，需要把这个bin目录加入到PATH环境变量中
+``` zsh
+shiming@pro ➜  bin git:(bb39b6e) vi ~/.dotfile/.zprofile
+shiming@pro ➜  bin git:(bb39b6e) source ~/.zshrc
+shiming@pro ➜  bin git:(bb39b6e) configtxgen -version
+configtxgen:
+ Version: 1.4.0
+ Commit SHA: d700b43
+ Go version: go1.11.1
+ OS/Arch: darwin/amd64
+```
+
+
+## 
 
 ## 官方培训和认证
 linux基金会training目录：  
