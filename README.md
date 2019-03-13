@@ -20,7 +20,7 @@
 ![](https://hyperledger-fabric.readthedocs.io/en/latest/_images/network.diagram.1.png)
 
 ## 开发环境准备
-**1. 安装最新curl**
+**1. 安装最新curl**  
 先用`curl --version`检查系统中是否已经安装了curl
 ``` zsh
 shiming@pro ➜  ~ curl --version
@@ -34,7 +34,7 @@ Features: AsynchDNS IPv6 Largefile GSS-API Kerberos SPNEGO NTLM NTLM_WB SSL libz
 shiming@pro ➜  ~ brew install curl
 ```
 
-**2. 安装Docker 和 Docker Compose**
+**2. 安装Docker 和 Docker Compose**  
 如果已安装，检查版本，版本需大于17.06.2，建议安装最新版：    
 ``` zsh
 shiming@pro ➜  ~ docker --version
@@ -45,7 +45,7 @@ docker-compose version 1.23.2, build 1110ad01
 
 如果未安装，请参考[docker官方安装指引(Mac)](https://docs.docker.com/docker-for-mac/install/)
 
-**3. 安装golang**
+**3. 安装golang**  
 参考golang官方指引 https://golang.org/dl/
 
 安装好golang之后注意要把GOPATH和$GOPATH/bin加到PATH环境变量中
@@ -56,7 +56,7 @@ shiming@pro ➜  ~ go version
 go version go1.11.5 darwin/amd64
 ```
 
-**4. 安装nodejs和npm**
+**4. 安装nodejs和npm**  
 如果使用nodejs开发hyperledger fabric应用则需安装nodejs和npm
 **官方只支持8.x的nodejs版本**，另外官方推荐npm版本是5.6.0
 
